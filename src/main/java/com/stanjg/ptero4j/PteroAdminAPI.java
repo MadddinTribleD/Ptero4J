@@ -27,6 +27,10 @@ public class PteroAdminAPI {
         this.key = "Bearer " + key;
     }
 
+    /**
+     * Initializes this PteroAdminAPI instance
+     * @return true if a valid connection could be established
+     */
     public boolean initialize(){
 
         boolean testResult = false;

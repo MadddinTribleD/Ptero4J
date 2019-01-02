@@ -22,15 +22,30 @@ public class PteroUserAPI {
 
         this.baseURL = baseURL.endsWith("/") ? baseURL  + "api/client" : baseURL + "/api/client";
         this.key = "Bearer " + key;
+    }
 
+    /**
+     * Initializes this PteroUserAPI instance
+     * @return true if a valid connection could be established
+     */
+    public boolean initialize(){
+
+        boolean testResult = false;
         try {
-            new TestController(null, this.baseURL, this.key).testUserConnection();
+            testResult = new TestController(null, this.baseURL, this.key).testUserConnection();
         } catch (IOException e) {
             e.printStackTrace();
+            testResult = false;
+        }
+
+        if(!testResult) {
+            return false;
         }
 
         this.serversController = new UserServersController(this, this.baseURL, this.key);
         this.genericController = new GenericController(this, this.baseURL, this.key);
+
+        return true;
     }
 
     /**

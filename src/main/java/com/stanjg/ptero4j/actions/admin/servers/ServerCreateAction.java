@@ -17,9 +17,14 @@ public class ServerCreateAction implements PteroAction<Server> {
     public ServerCreateAction(PteroAdminAPI api) {
         this.api = api;
         this.json = new JSONObject();
+        JSONObject allocations = getOrCreateJSONObject(json, "allocation");
+        JSONArray additional = getOrCreateJSONArray(allocations, "additional");
+        getOrCreateJSONObject(this.json, "environment");
+
+        getOrCreateJSONObject(json, "external_id");
     }
 
-    public ServerCreateAction setExternalId(int id) {
+    public ServerCreateAction setExternalId(String id) {
         json.put("external_id", id);
         return this;
     }
@@ -60,6 +65,10 @@ public class ServerCreateAction implements PteroAction<Server> {
     }
 
     public ServerCreateAction setEnvironmentVariables() {
+        JSONObject env = getOrCreateJSONObject(this.json, "environment");
+
+        env.put("SERVER_JARFILE", "server.jar");
+        env.put("VANILLA_VERSION", "latest");
         return this; // TODO
     }
 
@@ -87,13 +96,13 @@ public class ServerCreateAction implements PteroAction<Server> {
     }
 
     public ServerCreateAction setAllocation(int id) {
-        JSONObject allocations = getOrCreateJSONObject(json, "allocations");
+        JSONObject allocations = getOrCreateJSONObject(json, "allocation");
         allocations.put("default", id);
         return this;
     }
 
     public ServerCreateAction addAdditionalAllocations(int... ids) {
-        JSONObject allocations = getOrCreateJSONObject(json, "allocations");
+        JSONObject allocations = getOrCreateJSONObject(json, "allocation");
         JSONArray additional = getOrCreateJSONArray(allocations, "additional");
         for (int i : ids) {
             additional.put(i);
@@ -107,6 +116,11 @@ public class ServerCreateAction implements PteroAction<Server> {
         for (int i : ids) {
             locations.put(i);
         }
+        return this;
+    }
+
+    public ServerCreateAction setDeploy(boolean deploy) {
+        json.put("deploy", deploy);
         return this;
     }
 

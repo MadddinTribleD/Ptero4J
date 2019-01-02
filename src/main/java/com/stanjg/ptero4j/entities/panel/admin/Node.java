@@ -4,6 +4,8 @@ import com.stanjg.ptero4j.PteroAdminAPI;
 import com.stanjg.ptero4j.actions.admin.nodes.NodeUpdateAction;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class Node {
 
     private PteroAdminAPI api;
@@ -69,6 +71,8 @@ public class Node {
     public Location getLocation() {
         return api.getLocationsController().getLocation(getLocationId());
     }
+
+    public List<Allocation> getAllocations() { return api.getNodesController().getNodeAllocation(this.getId()); }
 
     public int getId() {
         return id;

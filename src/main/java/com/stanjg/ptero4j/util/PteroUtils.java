@@ -26,6 +26,13 @@ public class PteroUtils {
                 return "The given key does not have permission for this action!\n" + response.request().method() + " " + response.request().url();
             case 404:
                 return "An invalid endpoint was requested by the library, please create an issue on github.\n" + response.request().method() + " " + response.request().url();
+            case 422:
+                try {
+                    return "Unprocessable Entity.\n" + response.request().method() + " " + response.request().url() + "\n" + response.body().string();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    return "Unprocessable Entity." + response.request().method() + " " + response.request().url();
+                }
             case 429:
                 return "You have been rate limited!";
             case 500:

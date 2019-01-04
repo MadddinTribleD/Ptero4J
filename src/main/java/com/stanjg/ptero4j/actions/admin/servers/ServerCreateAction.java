@@ -9,6 +9,8 @@ import com.stanjg.ptero4j.util.HTTPMethod;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 public class ServerCreateAction implements PteroAction<Server> {
 
     private JSONObject json;
@@ -64,12 +66,16 @@ public class ServerCreateAction implements PteroAction<Server> {
         return this;
     }
 
-    public ServerCreateAction setEnvironmentVariables() {
+    public ServerCreateAction setEnvironmentVariables(Map<String, String> environments) {
         JSONObject env = getOrCreateJSONObject(this.json, "environment");
 
-        env.put("SERVER_JARFILE", "server.jar");
-        env.put("VANILLA_VERSION", "latest");
-        return this; // TODO
+        for (Map.Entry<String, String> e : environments.entrySet()) {
+            if(!e.getKey().startsWith("P_")) {
+                env.put(e.getKey(), e.getValue());
+            }
+        }
+
+        return this;
     }
 
     public ServerCreateAction setSkipScripts(boolean skipScripts) {
